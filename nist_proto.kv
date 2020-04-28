@@ -1,0 +1,185 @@
+
+# this intializes the windows
+# defining window under manager initializes them
+
+<Button>
+    font_name: 'Roboto-Bold.ttf'
+    font_size:20
+    color: 0.3, 0.6, 0.7, 1
+    size_hint:0.23,0.08
+    size: 150, 50
+    opacity: 1 if self.state == 'normal' else .5 
+
+<LogWindow>
+    name: "log"
+    username: username
+    password: password
+    FloatLayout:
+        Label: 
+            text: "Username: "
+            pos_hint:{"x":0.1,"top":0.9}
+            size_hint: 0.35, 0.15
+            font_size: (root.width**2 + root.height**2) / 13**4
+        TextInput:
+            id: username
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint:{"x":0.45, "top": 0.85}
+            size_hint:0.35, 0.08
+            multiline: False
+        Label:
+            text: "Password: "
+            pos_hint: {"x":0.1, "top":0.7}
+            size_hint: 0.35, 0.15
+            font_size: (root.width**2 + root.height**2) / 13 ** 4
+        TextInput:
+            id: password
+            pos_hint: {"x": 0.45, "top": 0.65}
+            size_hint: 0.35, 0.08
+            font_size: (root.width**2 + root.height**2) / 14 ** 4
+            multiline: False
+        Button:
+            pos_hint:{"x":0.35,"y":0.3}
+            size_hint: 0.25, 0.1
+            font_size: (root.width**2 + root.height**2) / 13**4
+            text: "Login"
+            on_release:
+                root.manager.transition.direction = "right"
+                root.loginBtn()
+        Button:
+            pos_hint:{"x":0, "top":1}
+            size_hint: 0.1, 0.08
+            text: "Home"
+            on_press:
+                self.background_color = (0.5,0.5,0.5,0.5)
+            on_release: 
+                self.background_color = (1,1,1,1)
+                app.root.current = "home" 
+                root.manager.transition.direction = "left"
+
+
+
+<SelectWindow>:
+    name: "home"
+    canvas.before:
+        Rectangle:
+            pos:self.pos
+            size:self.size
+            source: "logo.png"
+    ClockLabel:
+        id: clock_label
+        font_size: 50
+        color: (0.3, 0.6, 0.7, 1)
+        pos_hint:{"top": 1.43}
+        font_name:'Roboto-Bold.ttf'
+
+    Button:
+        pos_hint:{"x":0.7, "top": 0.1 }
+        size_hint:0.23,0.08
+        text: "User"
+        on_press:
+            self.background_color = (0.5,0.5,0.5,0.5)
+        on_release:
+            app.root.current = "main"
+            self.background_color = (1,1,1,1)
+            root.manager.transition.direction = "left"
+    Button:
+        pos_hint:{"x":0.08, "top":0.1}
+        size_hint:0.23,0.08
+        text: "Researcher"
+        on_press:
+            self.background_color = (0.5,0.5,0.5,0.5)
+        on_release:
+            app.root.current = "login"
+            self.background_color = (1,1,1,1)
+            root.manager.transition.direction = "right"
+    
+
+<MainWindow>:
+    name: "main"
+    canvas.before:
+        Rectangle:
+            pos:self.pos
+            size:self.size
+            source: "logo.png"
+
+    ClockLabel:
+        id: clock_label
+        font_size: 50
+        color: (0.3, 0.6, 0.7, 1)
+        pos_hint:{"X":0.5,"top": 1.43}
+        font_name:'Roboto-Bold.ttf'
+
+    Button:
+        pos_hint:{"x":0, "top":1}
+        size_hint: 0.1, 0.08
+        text: "Home"
+        on_press:
+            self.background_color = (0.5,0.5,0.5,0.5)
+        on_release: 
+            self.background_color = (1,1,1,1)
+            app.root.current = "home" 
+            root.manager.transition.direction = "right"
+
+    Button:
+        pos_hint:{"x":0.7, "top": 0.1 }
+        size_hint:0.23,0.08
+        text : "Start Questions"
+        on_press:
+            self.background_color = (0.5,0.5,0.5,0.5)
+        on_release: 
+            self.background_color = (1,1,1,1)
+            app.root.current = "second" 
+                # this makes the windows change
+            root.manager.transition.direction = "left"
+                # this controls the direction of the window change
+    Button:
+        pos_hint:{"x":0.08, "top":0.1}
+        size_hint: 0.23, 0.08
+        text: "Instructions"
+        on_press:
+            self.background_color = (0.5,0.5,0.5,0.5)
+        on_release:
+            root.btn()
+            self.background_color = (1,1,1,1)
+    
+<POP>
+    Label:
+        text: "These are the instructions"
+        size_hint: 0.6, 0.2
+        pos_hint: {"x":0.2, "top":1}
+
+
+<SecondWindow>:
+    name: "second"
+    Button:
+        pos_hint:{"x":0.7, "top": 0.1 }
+        size_hint:0.23,0.08
+        text: "Next Question"
+        on_press:
+            self.background_color = (0.5,0.5,0.5,0.5)
+        on_release:
+            app.root.current = "third"
+            self.background_color = (1,1,1,1)
+            root.manager.transition.direction = "left"
+
+
+    Button:
+        pos_hint:{"x":0.08, "top":0.1}
+        size_hint: 0.23, 0.08
+        text: "Go Back"
+        on_release: 
+            app.root.current = "main"
+            root.manager.transition.direction = "right"
+
+<ThirdWindow>:
+    name:"third"
+    Button:
+        pos_hint:{"x":0.08, "top":0.1}
+        size_hint: 0.23, 0.08
+        text: "Go Back"
+        on_release: 
+            app.root.current = "second"
+            root.manager.transition.direction = "right"
+
+<ReWindow>:
+    name:"researcher"
