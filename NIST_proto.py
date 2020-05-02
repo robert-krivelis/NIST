@@ -1,7 +1,3 @@
-
-
-
-
 from kivy.app import App
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
@@ -71,6 +67,129 @@ def invalidLogin():
 
 # researcher window - current has nothing in it    
 class ReWindow(Screen):
+    def create_Btn(self):
+        mycursor = mydb.cursor()
+        mycursor.execute("SELECT * FROM slide")
+        myresult = mycursor.fetchall()
+        slide_num = mycursor.rowcount
+        mycursor.execute("SELECT * FROM mult_choice")
+        myresult = mycursor.fetchall()
+        mult_num = mycursor.rowcount
+        mycursor.execute("SELECT * FROM textinput")
+        myresult = mycursor.fetchall()
+        text_num = mycursor.rowcount
+        
+        if slide_num + mult_num + text_num == 0:
+            no_question_warn()
+        else:
+            pass
+    def show_question_Btn(self):
+        show_question_num()
+        
+
+class MultWindow(Screen):
+    question = ObjectProperty(None)
+    option1 = ObjectProperty(None)
+    option2 = ObjectProperty(None)
+    option3 = ObjectProperty(None)
+    option4 = ObjectProperty(None)
+    
+
+    def submit_Btn(self):
+        q = self.question.text
+        op1 = self.option1.text
+        op2 = self.option2.text
+        op3 = self.option3.text
+        op4 = self.option4.text
+        if self.question.text == "":
+            invalidInput()
+        elif mult_duplicate(q):
+            duplicate_warning()
+        else:
+            mycursor = mydb.cursor()
+            sql = "INSERT INTO mult_choice (question,option1,option2,option3,option4) VALUES (%s, %s, %s, %s, %s)"
+            val =(q, op1, op2, op3, op4)
+            mycursor.execute(sql, val)
+            mydb.commit()
+
+def mult_duplicate(question):
+    mycursor = mydb.cursor()
+    mycursor.execute("SELECT * FROM mult_choice")
+    myresult = mycursor.fetchall() 
+    for x in myresult:
+        if question == x[1]:
+            return True
+        else:
+            pass
+    return False
+
+            
+def duplicate_warning():
+    pop = Popup(title = 'Error',
+                content = Label(text = 'This question already exist'),
+                size_hint = (None, None), size = (400, 400))
+    pop.open()
+
+def invalidInput():
+    pop = Popup(title = 'Error',
+                content = Label(text = 'One or more input is invalid'),
+                size_hint = (None, None), size = (400, 400))
+    pop.open()    
+    
+def no_question_warn():
+    pop = Popup(title = 'Error',
+                content = Label(text = 'There are no questions saved'),
+                size_hint = (None, None), size = (400, 400))
+    pop.open()
+
+def show_question_num():
+    mycursor = mydb.cursor()
+    mycursor.execute("SELECT * FROM mult_choice")
+    myresult = mycursor.fetchall()     
+    mult_counter = mycursor.rowcount
+    mycursor.execute("SELECT * FROM slide")
+    myresult = mycursor.fetchall()   
+    slider_counter = mycursor.rowcount
+    mycursor.execute("SELECT * FROM textinput")
+    myresult = mycursor.fetchall() 
+    text_counter = mycursor.rowcount
+    pop = Popup(title = 'Current question types saved',
+                content = Label(text = "Multiple Choice Question: " + str(mult_counter) +"\n" + "\n"
+                                + "Slider Question: " + str(slider_counter) + "\n" + "\n"
+                                + "Text Question: " + str(text_counter)),
+                size_hint = (None, None), size = (400, 400))
+    pop.open()
+
+class SliderWindow(Screen):
+    question = ObjectProperty(None)
+    limit = ObjectProperty(None)
+
+    def submit_Btn(self):
+        q = self.question.text
+        lim = self.limit.text
+        if q == "" or lim == "":
+            invalidInput()
+        elif check_num(lim):
+            invalidInput()
+        elif mult_duplicate(q):
+            duplicate_warning()
+        else:
+            print(int(lim))
+            mycursor = mydb.cursor()
+            sql = "INSERT INTO slide (question,slide_limit) VALUES (%s, %s)"
+            val =(q, int(lim))
+            mycursor.execute(sql, val)
+            mydb.commit()            
+
+def check_num(st):
+    for x in st:
+        if ord(x) < 48 or ord(x) > 57:
+            return True
+        else:
+            pass
+    return False
+
+class InputWindow(Screen):
     pass
 
 
@@ -99,6 +218,8 @@ class MainWindow(Screen):
 #second question window
 class SecondWindow(Screen):
     pass
+# raido buttons
+# slider answer
 
 #third question window
 class ThirdWindow(Screen):
@@ -135,7 +256,9 @@ kv = Builder.load_file("nist_proto.kv")
 # this allows screen to be called by one another via their names
 screens = [SelectWindow(name = 'home'), LogWindow(name = 'login'), 
            ReWindow(name = 'researcher'), MainWindow(name ='main'),
-           SecondWindow(name = 'second'), ThirdWindow(name ='third'),]
+           SecondWindow(name = 'second'), ThirdWindow(name ='third'),
+           MultWindow(name = 're_mult'), SliderWindow(name = 're_slider'),
+           InputWindow(name = 're_input')]
 
 for screen in screens:
     sm.add_widget(screen)
