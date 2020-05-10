@@ -5,6 +5,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
+from kivy.properties import StringProperty
 from kivy.uix.popup import Popup
 from kivy.uix.floatlayout import FloatLayout
 from kivy.lang import Builder
@@ -223,12 +224,61 @@ class SecondWindow(Screen):
 
 #third question window
 class ThirdWindow(Screen):
-    pass 
-
+    def next_Btn(self):
+        first_q = quest_str_lst[0]
+        sm.current = first_q
+        sm.transition.direction = "left"
 # this manages the window to allow for screen transitions
 class WindowManager (ScreenManager):
     pass
 
+class MultTemplate (Screen):
+    mult_question = StringProperty() 
+    # this allows the kv label text to be changed via python
+    def __init__(self, **kwargs):
+        super(MultTemplate, self).__init__(**kwargs)
+        self.question = ObjectProperty(None)
+        self.answer1 = ObjectProperty(None)
+        self.answer2 = ObjectProperty(None)
+        self.answer3 = ObjectProperty(None)
+        self.answer4 = ObjectProperty(None)
+
+        mycursor = mydb.cursor()
+        sql = "SELECT question FROM mult_choice WHERE id = '2'"                  # * will give the entire row, specify a field after SELECT if just want one column  
+        mycursor.execute(sql)
+        myresult = mycursor.fetchall()  
+        print((myresult[0])[0])                                                  # myresult produces the question as [(question)]
+        self.mult_question = (myresult[0])[0]
+    
+    def next_Btn(self):
+        if len (quest_str_lst) == 1:
+            pass
+        else:
+            quest_str_lst.pop(0)
+            next_q = quest_str_lst[0]
+            sm.current = next_q
+            sm.transition.diretion = "left"
+        
+class SlideTemplate(Screen):
+    def next_Btn(self):
+        if len (quest_str_lst) == 1:
+            pass
+        else:
+            quest_str_lst.pop(0)
+            next_q = quest_str_lst[0]
+            sm.current = next_q
+            sm.transition.direction = "left"
+            
+class TextTemplate(Screen):
+    def next_Btn(self):
+        if len (quest_str_lst) == 1:
+            pass
+        else:
+            quest_str_lst.pop(0)
+            next_q = quest_str_lst[0]
+            sm.current = next_q
+            sm.transition.direction = "left"    
+    
 
 #this displays the clock seen in each window
 class ClockLabel(Label):
@@ -260,9 +310,46 @@ screens = [SelectWindow(name = 'home'), LogWindow(name = 'login'),
            MultWindow(name = 're_mult'), SliderWindow(name = 're_slider'),
            InputWindow(name = 're_input')]
 
-for screen in screens:
-    sm.add_widget(screen)
+# this will be defined by rowcount of each table
 
+mult_num = 3
+mult_list = []
+slide_num = 2
+slide_list =[]
+text_num = 1
+text_list = []
+
+quest_str_lst = []
+
+while mult_num > 0: 
+    screen = MultTemplate(name = 'mult %d' % mult_num)
+    quest_str_lst.append("mult %d" % mult_num)
+    mult_list.append(screen)
+    mult_num -= 1
+print(mult_list)
+
+while slide_num > 0:
+    screen = SlideTemplate(name = 'slide %d' % slide_num)
+    quest_str_lst.append("slide %d" % slide_num)
+    slide_list.append(screen)
+    slide_num -= 1
+
+while text_num > 0:
+    screen = TextTemplate(name = 'text %d' % text_num)
+    quest_str_lst.append("text %d" % text_num)
+    text_list.append(screen)
+    text_num -= 1
+    
+screens.extend(mult_list)
+screens.extend(slide_list)
+screens.extend(text_list)
+
+
+for i in screens:
+    sm.add_widget(i)
+
+print(screens)
+print(quest_str_lst)
 # the starting screen when starting the program
 sm.current = 'home'
 
