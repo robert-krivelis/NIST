@@ -182,6 +182,13 @@
             app.root.current = "second"
             root.manager.transition.direction = "right"
 
+    Button:
+        pos_hint:{"x":0.5, "top":0.1}
+        size_hint: 0.23, 0.08
+        text: "Next"
+        on_release: 
+            root.next_Btn()
+
 <ReWindow>:
     name:"researcher"
     FloatLayout:
@@ -312,7 +319,6 @@
                 app.root.current = "researcher" 
                 root.manager.transition.direction = "left"
 <SliderWindow>:
-    name: "re_slider"
     question: question
     limit: limit
     FloatLayout:
@@ -358,6 +364,130 @@
                 self.background_color = (1,1,1,1)
                 app.root.current = "researcher" 
                 root.manager.transition.direction = "left"
+<MultTemplate>:
+    question: question
+    answer1: answer1
+    answer2: answer2
+    answer3: answer3
+    answer4: answer4
+    FloatLayout:
+        Label: 
+            text: "Question:"
+            pos_hint:{"x":0.32,"top":0.9}
+            size_hint: 0.35, 0.15
+            font_size: (root.width**2 + root.height**2) / 13**4
+        Label:
+            id: question
+            text: root.mult_question
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint:{"x":0.1, "top": 0.75}
+            size_hint:0.80, 0.08
+            multiline: False
+        Label: 
+            text: "Option 1:"
+            pos_hint: {"x": 0.1, "top":0.60}
+            size_hint: 0.25, 0.05
+            font_size: (root.width**2 + root.height**2) / 14**4
+        TextInput:
+            id: answer1
+            pos_hint: {"x":0.145, "top":0.50}
+            size_hint:0.15, 0.065
+            font_size:(root.width**2 + root.height**2) / 15**4
+        Label: 
+            text: "Option 2:"
+            pos_hint: {"x": 0.3, "top":0.60}
+            size_hint: 0.25, 0.05
+            font_size: (root.width**2 + root.height**2) / 14**4
+        TextInput:
+            id: answer2
+            pos_hint: {"x":0.345, "top":0.50}
+            size_hint:0.15, 0.065
+            font_size:(root.width**2 + root.height**2) / 15**4
+        Label: 
+            text: "Option 3:"
+            pos_hint: {"x": 0.5, "top":0.60}
+            size_hint: 0.25, 0.05
+            font_size: (root.width**2 + root.height**2) / 14**4
+        TextInput:
+            id: answer3
+            pos_hint: {"x":0.545, "top":0.50}
+            size_hint:0.15, 0.065
+            font_size:(root.width**2 + root.height**2) / 15**4
+        Label: 
+            text: "Option 4:"
+            pos_hint: {"x": 0.7, "top":0.60}
+            size_hint: 0.25, 0.05
+            font_size: (root.width**2 + root.height**2) / 14**4
+        TextInput:
+            id: answer4
+            pos_hint: {"x":0.745, "top":0.50}
+            size_hint:0.15, 0.065
+            font_size:(root.width**2 + root.height**2) / 15**4
+        Button:
+            pos_hint:{"x":0.37, "top":0.3}
+            size_hint: 0.25, 0.08
+            text: "Next"
+            on_press:
+                self.background_color = (0.5,0.5,0.5,0.5)
+            on_release: 
+                self.background_color = (1,1,1,1)
+                root.next_Btn()
+        Button:
+            pos_hint:{"x":0, "top":1}
+            size_hint: 0.25, 0.08
+            text: "Question Selection"
+            on_press:
+                self.background_color = (0.5,0.5,0.5,0.5)
+            on_release: 
+                self.background_color = (1,1,1,1)
+                app.root.current = "researcher" 
+                root.manager.transition.direction = "left"
+<SlideTemplate>:
+    FloatLayout:
+        Label: 
+            text: "Question:"
+            pos_hint:{"x":0.32,"top":0.9}
+            size_hint: 0.35, 0.15
+            font_size: (root.width**2 + root.height**2) / 13**4
+        TextInput:
+            id: question
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint:{"x":0.1, "top": 0.75}
+            size_hint:0.80, 0.08
+            multiline: False
+        
+        Label:
+            text: "Slider Limit"
+            pos_hint: {"x":0.32, "top": 0.7}
+            size_hint: 0.35, 0.15
+            font_size: (root.width**2 + root.height**2) / 13**4
+        TextInput:
+            id: limit
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint:{"x":0.335, "top": 0.55}
+            size_hint:0.3, 0.08
+            multiline: False
+        Button:
+            pos_hint:{"x":0.37, "top":0.3}
+            size_hint: 0.25, 0.08
+            text: "Submit"
+            on_press:
+                self.background_color = (0.5,0.5,0.5,0.5)
+            on_release: 
+                self.background_color = (1,1,1,1)
+                root.submit_Btn()        
+        Button:
+            pos_hint:{"x":0, "top":1}
+            size_hint: 0.25, 0.08
+            text: "Question Selection"
+            on_press:
+                self.background_color = (0.5,0.5,0.5,0.5)
+            on_release: 
+                self.background_color = (1,1,1,1)
+                app.root.current = "researcher" 
+                root.manager.transition.direction = "left"
+
+
             
     
 
