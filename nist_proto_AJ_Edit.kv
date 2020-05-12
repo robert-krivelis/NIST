@@ -1,0 +1,595 @@
+########### UPDATES BY AJ ##########
+
+### Inserted some comments
+### Changed "Question Selection" button to "Back to Question Selection"
+### TO-DO = Create window where researcher can create text questions
+
+
+
+
+
+
+# this intializes the windows
+# defining window under manager initializes them
+
+<Button>
+    font_name: 'Roboto-Bold.ttf'
+    font_size:20
+    color: 0.3, 0.6, 0.7, 1
+    size_hint:0.23,0.08
+    size: 150, 50
+    opacity: 1 if self.state == 'normal' else .5 
+
+### THIS DEFINES THE RESEARCHER LOGIN WINDOW
+<LogWindow>
+    name: "log"
+    username: username
+    password: password
+    FloatLayout:
+        Label: 
+            text: "Username: "
+            pos_hint:{"x":0.1,"top":0.9}
+            size_hint: 0.35, 0.15
+            font_size: (root.width**2 + root.height**2) / 13**4
+        TextInput:
+            id: username
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint:{"x":0.45, "top": 0.85}
+            size_hint:0.35, 0.08
+            multiline: False
+        Label:
+            text: "Password: "
+            pos_hint: {"x":0.1, "top":0.7}
+            size_hint: 0.35, 0.15
+            font_size: (root.width**2 + root.height**2) / 13 ** 4
+        TextInput:
+            id: password
+            pos_hint: {"x": 0.45, "top": 0.65}
+            size_hint: 0.35, 0.08
+            font_size: (root.width**2 + root.height**2) / 14 ** 4
+            multiline: False
+        Button:
+            pos_hint:{"x":0.35,"y":0.3}
+            size_hint: 0.25, 0.1
+            font_size: (root.width**2 + root.height**2) / 13**4
+            text: "Login"
+            on_release:
+                root.manager.transition.direction = "up"
+                #root.loginBtn()
+                app.root.current = "researcher"
+        Button:
+            pos_hint:{"x":0, "top":1}
+            size_hint: 0.1, 0.08
+            text: "Home"
+            on_press:
+                self.background_color = (0.5,0.5,0.5,0.5)
+            on_release: 
+                self.background_color = (1,1,1,1)
+                app.root.current = "home" 
+                root.manager.transition.direction = "left"
+
+
+### VERY FIRST WINDOW (TO SELECT 'RESEACHER' OR 'PATIENT')
+<SelectWindow>:
+    name: "home"
+    canvas.before:
+        Rectangle:
+            pos:self.pos
+            size:self.size
+            source: "logo.png"
+    ClockLabel:
+        id: clock_label
+        font_size: 50
+        color: (0.3, 0.6, 0.7, 1)
+        pos_hint:{"top": 1.43}
+        font_name:'Roboto-Bold.ttf'
+
+    Button:
+        pos_hint:{"x":0.7, "top": 0.1 }
+        size_hint:0.23,0.08
+        text: "User"
+        on_press:
+            self.background_color = (0.5,0.5,0.5,0.5)
+        on_release:
+            app.root.current = "main"
+            self.background_color = (1,1,1,1)
+            root.manager.transition.direction = "left"
+    Button:
+        pos_hint:{"x":0.08, "top":0.1}
+        size_hint:0.23,0.08
+        text: "Researcher"
+        on_press:
+            self.background_color = (0.5,0.5,0.5,0.5)
+        on_release:
+            app.root.current = "login"
+            self.background_color = (1,1,1,1)
+            root.manager.transition.direction = "right"
+    
+### FIRST PAGE OF PATIENT INTERFACE (BEFORE QUESTIONS)
+### PATIENT CAN SEE THE INSTRUCTIONS ON THIS PAGE
+<MainWindow>:
+    name: "main"
+    canvas.before:
+        Rectangle:
+            pos:self.pos
+            size:self.size
+            source: "logo.png"
+
+    ClockLabel:
+        id: clock_label
+        font_size: 50
+        color: (0.3, 0.6, 0.7, 1)
+        pos_hint:{"X":0.5,"top": 1.43}
+        font_name:'Roboto-Bold.ttf'
+
+    Button:
+        pos_hint:{"x":0, "top":1}
+        size_hint: 0.1, 0.08
+        text: "Home"
+        on_press:
+            self.background_color = (0.5,0.5,0.5,0.5)
+        on_release: 
+            self.background_color = (1,1,1,1)
+            app.root.current = "home" 
+            root.manager.transition.direction = "right"
+
+    Button:
+        pos_hint:{"x":0.7, "top": 0.1 }
+        size_hint:0.23,0.08
+        text : "Start Questions"
+        on_press:
+            self.background_color = (0.5,0.5,0.5,0.5)
+        on_release: 
+            self.background_color = (1,1,1,1)
+            app.root.current = "second" 
+                # this makes the windows change
+            root.manager.transition.direction = "left"
+                # this controls the direction of the window change
+    Button:
+        pos_hint:{"x":0.08, "top":0.1}
+        size_hint: 0.23, 0.08
+        text: "Instructions"
+        on_press:
+            self.background_color = (0.5,0.5,0.5,0.5)
+        on_release:
+            root.btn()
+            self.background_color = (1,1,1,1)
+    
+<POP>
+    Label:
+        text: "These are the instructions"
+        size_hint: 0.6, 0.2
+        pos_hint: {"x":0.2, "top":1}
+
+
+<SecondWindow>:
+    name: "second"
+    Button:
+        pos_hint:{"x":0.7, "top": 0.1 }
+        size_hint:0.23,0.08
+        text: "Next Question"
+        on_press:
+            self.background_color = (0.5,0.5,0.5,0.5)
+        on_release:
+            app.root.current = "third"
+            self.background_color = (1,1,1,1)
+            root.manager.transition.direction = "left"
+
+
+    Button:
+        pos_hint:{"x":0.08, "top":0.1}
+        size_hint: 0.23, 0.08
+        text: "Go Back"
+        on_release: 
+            app.root.current = "main"
+            root.manager.transition.direction = "right"
+
+<ThirdWindow>:
+    name:"third"
+    Button:
+        pos_hint:{"x":0.08, "top":0.1}
+        size_hint: 0.23, 0.08
+        text: "Go Back"
+        on_release: 
+            app.root.current = "second"
+            root.manager.transition.direction = "right"
+
+    Button:
+        pos_hint:{"x":0.5, "top":0.1}
+        size_hint: 0.23, 0.08
+        text: "Next"
+        on_release: 
+            root.next_Btn()
+
+
+### WINDOW WHERE RESEARCHER SELECTS QUESTION TYPE
+<ReWindow>:
+    name:"researcher"
+    FloatLayout:
+        Label: 
+            text: "Please choose a question method"
+            pos_hint:{"x":0.32,"top":0.7}
+            size_hint: 0.35, 0.15
+            font_size: (root.width**2 + root.height**2) / 13**4
+        Button:
+            pos_hint:{"x":0.7, "top":0.3}
+            size_hint: 0.25, 0.08
+            text: "Multiple Choice"
+            on_press:
+                self.background_color = (0.5,0.5,0.5,0.5)
+            on_release: 
+                self.background_color = (1,1,1,1)
+                app.root.current = "re_mult" 
+                root.manager.transition.direction = "right"
+        Button:
+            pos_hint: {"x":0.4, "top": 0.3}
+            size_hint: 0.25, 0.08
+            text: "Numerical Slider"
+            on_release:
+                self.background_color = (1,1,1,1)
+                app.root.current = "re_slider"
+                root.manager.transition.direction = "right"
+        Button:
+            pos_hint: {"x": 0.1, "top": 0.3}
+            size_hint: 0.25, 0.08
+            text: "Text Input"
+            on_release:
+                self.background_color = (1,1,1,1)
+                app.root.current = "re_input"
+                root.manager.transition.direction = "right"
+        Button: 
+            pos_hint: {"x":0.4, "top":0.1}
+            size_hint: 0.23, 0.08
+            text: "Create Questions"
+            on_release:
+                self.background_color = (1,1,1,1)
+                root.create_Btn()
+        Button:
+            id: total_num
+            pos_hint: {"x":0.75, "top":1}
+            size_hint: 0.23,0.08
+            text: "Questions Saved"
+            on_release:
+                self.background_color = (1,1,1,1)
+                root.show_question_Btn()
+
+
+### WINDOW WHERE RESEARCHER CREATES A MC-QUESTION
+<MultWindow>:
+    question: question
+    option1: option1
+    option2: option2
+    option3: option3
+    option4: option4
+
+    name:"re_mult"
+    FloatLayout:
+        Label: 
+            text: "Create a MC Question:"
+            pos_hint:{"x":0.32,"top":0.9}
+            size_hint: 0.35, 0.15
+            font_size: (root.width**2 + root.height**2) / 13**4
+        TextInput:
+            id: question
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint:{"x":0.1, "top": 0.75}
+            size_hint:0.80, 0.08
+            multiline: False
+        Label: 
+            text: "Option 1:"
+            pos_hint: {"x": 0.1, "top":0.60}
+            size_hint: 0.25, 0.05
+            font_size: (root.width**2 + root.height**2) / 14**4
+        TextInput:
+            id: option1
+            pos_hint: {"x":0.145, "top":0.50}
+            size_hint:0.15, 0.065
+            font_size:(root.width**2 + root.height**2) / 15**4
+        Label: 
+            text: "Option 2:"
+            pos_hint: {"x": 0.3, "top":0.60}
+            size_hint: 0.25, 0.05
+            font_size: (root.width**2 + root.height**2) / 14**4
+        TextInput:
+            id: option2
+            pos_hint: {"x":0.345, "top":0.50}
+            size_hint:0.15, 0.065
+            font_size:(root.width**2 + root.height**2) / 15**4
+        Label: 
+            text: "Option 3:"
+            pos_hint: {"x": 0.5, "top":0.60}
+            size_hint: 0.25, 0.05
+            font_size: (root.width**2 + root.height**2) / 14**4
+        TextInput:
+            id: option3
+            pos_hint: {"x":0.545, "top":0.50}
+            size_hint:0.15, 0.065
+            font_size:(root.width**2 + root.height**2) / 15**4
+        Label: 
+            text: "Option 4:"
+            pos_hint: {"x": 0.7, "top":0.60}
+            size_hint: 0.25, 0.05
+            font_size: (root.width**2 + root.height**2) / 14**4
+        TextInput:
+            id: option4
+            pos_hint: {"x":0.745, "top":0.50}
+            size_hint:0.15, 0.065
+            font_size:(root.width**2 + root.height**2) / 15**4
+        Button:
+            pos_hint:{"x":0.37, "top":0.3}
+            size_hint: 0.25, 0.08
+            text: "Submit"
+            on_press:
+                self.background_color = (0.5,0.5,0.5,0.5)
+            on_release: 
+                self.background_color = (1,1,1,1)
+                root.submit_Btn()
+                app.root.current = "researcher"
+                root.manager.transition.direction = "right"
+        
+        
+        
+        Button:
+            pos_hint:{"x":0, "top":1}
+            size_hint: 0.45, 0.08
+            text: "Back to Question Selection"
+            on_press:
+                self.background_color = (0.5,0.5,0.5,0.5)
+            on_release: 
+                self.background_color = (1,1,1,1)
+                app.root.current = "researcher" 
+                root.manager.transition.direction = "left"
+
+
+
+### WINDOW WHERE RESEARCHER CREATES SLIDER-QUESTION
+<SliderWindow>:
+    question: question
+    limit: limit
+    start: start
+    increment: increment
+    FloatLayout:
+        Label: 
+            text: "Create a Slider Question:"
+            pos_hint:{"x":0.32,"top":0.9}
+            size_hint: 0.35, 0.15
+            font_size: (root.width**2 + root.height**2) / 13**4
+        TextInput:
+            id: question
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint:{"x":0.1, "top": 0.75}
+            size_hint:0.80, 0.08
+            multiline: False
+        
+
+        ### CODE FOR CREATING SLIDER START
+        Label:
+            text: "Slider Start"
+            pos_hint: {"center_x":0.16, "top": 0.7}
+            size_hint: 0.15, 0.15
+            font_size: (root.width**2 + root.height**2) / 13**4
+        TextInput:
+            id: start
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint:{"center_x":0.16, "top": 0.55}
+            size_hint:0.1, 0.08
+            multiline: False
+        
+        ### CODE FOR CREATING SLIDER LIMIT
+        Label:
+            text: "Slider Limit"
+            pos_hint: {"center_x":0.5, "top": 0.7}
+            size_hint: 0.15, 0.15
+            font_size: (root.width**2 + root.height**2) / 13**4
+        TextInput:
+            id: limit
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint:{"center_x":0.5, "top": 0.55}
+            size_hint:0.1, 0.08
+            multiline: False        
+        
+        ### CODE FOR CREATING SLIDER INCREMENT
+        Label:
+            text: "Slider Increment"
+            pos_hint: {"center_x":0.84, "top": 0.7}
+            size_hint: 0.15, 0.15
+            font_size: (root.width**2 + root.height**2) / 13**4
+        TextInput:
+            id: increment
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint:{"center_x":0.84, "top": 0.55}
+            size_hint:0.1, 0.08
+            multiline: False        
+        
+        
+        
+        
+        
+        
+        
+        Button:
+            pos_hint:{"x":0.37, "top":0.3}
+            size_hint: 0.25, 0.08
+            text: "Submit slider question!"
+            on_press:
+                self.background_color = (0.5,0.5,0.5,0.5)
+            on_release: 
+                self.background_color = (1,1,1,1)
+                root.submit_Btn()
+                app.root.current = "researcher"
+                root.manager.transition.direction = "right"
+                   
+        Button:
+            pos_hint:{"x":0, "top":1}
+            size_hint: 0.45, 0.08
+            text: "Back to Question Selection"
+            on_press:
+                self.background_color = (0.5,0.5,0.5,0.5)
+            on_release: 
+                self.background_color = (1,1,1,1)
+                app.root.current = "researcher" 
+                root.manager.transition.direction = "left"
+
+
+
+### TEMPLATE FOR PATIENT MC-QUESTION WINDOWS
+### (SAME AS 'MultWindow' ABOVE ???)
+<MultTemplate>:
+    question: question
+    answer1: answer1
+    answer2: answer2
+    answer3: answer3
+    answer4: answer4
+    FloatLayout:
+        Label: 
+            text: "Question:"
+            pos_hint:{"x":0.32,"top":0.9}
+            size_hint: 0.35, 0.15
+            font_size: (root.width**2 + root.height**2) / 13**4
+        Label:
+            id: question
+            text: root.mult_question
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint:{"x":0.1, "top": 0.75}
+            size_hint:0.80, 0.08
+            multiline: False
+        
+        ### MC OPTION 1
+        Label: 
+            text: "Option 1:"
+            pos_hint: {"x": 0.1, "top":0.60}
+            size_hint: 0.25, 0.05
+            font_size: (root.width**2 + root.height**2) / 14**4
+        Label:
+            id: answer1
+            text: root.MC_1
+            pos_hint: {"x":0.145, "top":0.50}
+            size_hint:0.15, 0.065
+            font_size:(root.width**2 + root.height**2) / 15**4
+        
+        ### MC OPTION 2
+        Label: 
+            text: "Option 2:"
+            pos_hint: {"x": 0.3, "top":0.60}
+            size_hint: 0.25, 0.05
+            font_size: (root.width**2 + root.height**2) / 14**4
+        Label:
+            id: answer2
+            text: root.MC_2
+            pos_hint: {"x":0.345, "top":0.50}
+            size_hint:0.15, 0.065
+            font_size:(root.width**2 + root.height**2) / 15**4
+
+        ### MC OPTION 3        
+        Label: 
+            text: "Option 3:"
+            pos_hint: {"x": 0.5, "top":0.60}
+            size_hint: 0.25, 0.05
+            font_size: (root.width**2 + root.height**2) / 14**4
+        Label:
+            id: answer3
+            text: root.MC_3
+            pos_hint: {"x":0.545, "top":0.50}
+            size_hint:0.15, 0.065
+            font_size:(root.width**2 + root.height**2) / 15**4
+
+        ### MC OPTION 4
+        Label: 
+            text: "Option 4:"
+            pos_hint: {"x": 0.7, "top":0.60}
+            size_hint: 0.25, 0.05
+            font_size: (root.width**2 + root.height**2) / 14**4
+        Label:
+            id: answer4
+            text: root.MC_4
+            pos_hint: {"x":0.745, "top":0.50}
+            size_hint:0.15, 0.065
+            font_size:(root.width**2 + root.height**2) / 15**4
+
+      
+        Button:
+            pos_hint:{"x":0.37, "top":0.3}
+            size_hint: 0.25, 0.08
+            text: "Next"
+            on_press:
+                self.background_color = (0.5,0.5,0.5,0.5)
+            on_release: 
+                self.background_color = (1,1,1,1)
+                root.next_Btn()
+        
+        Button:
+            pos_hint:{"x":0, "top":1}
+            size_hint: 0.25, 0.08
+            text: "Question Selection"
+            on_press:
+                self.background_color = (0.5,0.5,0.5,0.5)
+            on_release: 
+                self.background_color = (1,1,1,1)
+                app.root.current = "researcher" 
+                root.manager.transition.direction = "left"
+
+
+### TEMPLATE FOR PATIENT SLIDER-QUESTION WINDOWS
+### (SAME AS 'SliderWindow' ABOVE ???)
+<SlideTemplate>:
+    FloatLayout:
+        Label: 
+            text: "Question:"
+            pos_hint:{"x":0.32,"top":0.9}
+            size_hint: 0.35, 0.15
+            font_size: (root.width**2 + root.height**2) / 13**4
+        Label:
+            id: question
+            text: root.slider_question
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint:{"x":0.1, "top": 0.75}
+            size_hint:0.80, 0.08
+            multiline: False
+
+
+        ### CODE THAT PUTS A SLIDER IN EACH PATIENT QUESTION WINDOW
+        Slider:
+            id: patient_slider
+            # font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint:{"x":0.335, "top": 0.55}
+            size_hint:0.3, 0.08
+            min: root.start
+            max: root.limit
+            step: root.increment
+            orientation: 'horizontal'
+        Label:
+            #id: slider_value
+            pos_hint:{"x":0.335, "top": 0.45}
+            size_hint:0.3, 0.08
+            text: str(patient_slider.value)
+   
+        
+        Button:
+            pos_hint:{"x":0.37, "top":0.3}
+            size_hint: 0.25, 0.08
+            text: "Next..."
+            on_press:
+                self.background_color = (0.5,0.5,0.5,0.5)
+            on_release: 
+                self.background_color = (1,1,1,1)
+                root.next_Btn()        
+        Button:
+            pos_hint:{"x":0, "top":1}
+            size_hint: 0.45, 0.08
+            text: "Back to Question Selection"
+            on_press:
+                self.background_color = (0.5,0.5,0.5,0.5)
+            on_release: 
+                self.background_color = (1,1,1,1)
+                app.root.current = "researcher" 
+                root.manager.transition.direction = "left"
+
+
+            
+    
+
+
+
+
+
+
