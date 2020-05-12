@@ -1,0 +1,93 @@
+	#### Instructions on how to set up the NIST database ####
+
+>Everything will be done in the "root" folder.
+
+(1) Create the database
+-----> CREATE DATABASE <database_name>;
+
+(2) Go into the database
+-----> USE <database_name>;
+
+(3) Create the MC questions table
+-----> CREATE TABLE mult_choice(
+		mc_id INT NOT NULL AUTO_INCREMENT,
+		question VARCHAR(100),
+		option1 VARCHAR(100),
+		option2 VARCHAR(100),
+		option3 VARCHAR(100),
+		option4 VARCHAR(100),
+		PRIMARY KEY (mc_id));
+
+(4) Create the SLIDER questions table
+-----> CREATE TABLE slide(
+		slide_id INT NOT NULL AUTO_INCREMENT,
+		question VARCHAR(100),
+		slide_start INT DEFAULT 0,
+		slide_increment INT DEFAULT 1,
+		slide_limit INT,
+		PRIMARY KEY (slide_id));
+
+(4) Create the TEXT questions table
+-----> CREATE TABLE text_input(
+		text_id INT NOT NULL AUTO_INCREMENT,
+		question VARCHAR(255),
+		PRIMARY KEY (slide_id));
+
+>To check your work as you are going through the instructions:
+
+>>> "SHOW DATABASES;" = lists all databases that exist
+>>> "SELECT database();" = shows you which database you are currently working in
+>>> "SHOW TABLES;" = lists all the tables that exist in your database
+>>> "DESC <table_name>;" = shows all columns of <table_name>
+>>> "SELECT * FROM <table_name>;" = shows all rows (information) stored in <table_name> (will be empty because there is no data in any table!)
+
+
+>This is what each table should look like (fullscreen this document to see tables clearly):
+
+MariaDB [NIST_v1]> SHOW TABLES;
++-------------------+
+| Tables_in_NIST_v1 |
++-------------------+
+| mult_choice       |
+| slide             |
+| text_input        |
++-------------------+
+3 rows in set (0.001 sec)
+
+MariaDB [NIST_v1]> DESC mult_choice;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| mc_id    | int(11)      | NO   | PRI | NULL    | auto_increment |
+| question | varchar(255) | YES  |     | NULL    |                |
+| option1  | varchar(255) | YES  |     | NULL    |                |
+| option2  | varchar(255) | YES  |     | NULL    |                |
+| option3  | varchar(255) | YES  |     | NULL    |                |
+| option4  | varchar(255) | YES  |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+6 rows in set (0.003 sec)
+
+MariaDB [NIST_v1]> DESC slide;
++-----------------+--------------+------+-----+---------+----------------+
+| Field           | Type         | Null | Key | Default | Extra          |
++-----------------+--------------+------+-----+---------+----------------+
+| slide_id        | int(11)      | NO   | PRI | NULL    | auto_increment |
+| question        | varchar(255) | NO   |     | NULL    |                |
+| slide_start     | int(11)      | YES  |     | 0       |                |
+| slide_increment | int(11)      | YES  |     | 1       |                |
+| slide_limit     | int(11)      | NO   |     | NULL    |                |
++-----------------+--------------+------+-----+---------+----------------+
+5 rows in set (0.003 sec)
+
+MariaDB [NIST_v1]> DESC text_input;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| text_id  | int(11)      | NO   | PRI | NULL    | auto_increment |
+| question | varchar(255) | NO   |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+2 rows in set (0.003 sec)
+
+
+
+
