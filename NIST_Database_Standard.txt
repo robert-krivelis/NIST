@@ -10,28 +10,52 @@
 
 (3) Create the MC questions table
 -----> CREATE TABLE mult_choice(
-		mc_id INT NOT NULL AUTO_INCREMENT,
-		question VARCHAR(100),
-		option1 VARCHAR(100),
-		option2 VARCHAR(100),
-		option3 VARCHAR(100),
-		option4 VARCHAR(100),
-		PRIMARY KEY (mc_id));
+mc_id INT NOT NULL AUTO_INCREMENT,
+question VARCHAR(100),
+option1 VARCHAR(100),
+option2 VARCHAR(100),
+option3 VARCHAR(100),
+option4 VARCHAR(100),
+PRIMARY KEY (mc_id));
 
 (4) Create the SLIDER questions table
 -----> CREATE TABLE slide(
-		slide_id INT NOT NULL AUTO_INCREMENT,
-		question VARCHAR(100),
-		slide_start INT DEFAULT 0,
-		slide_increment INT DEFAULT 1,
-		slide_limit INT,
-		PRIMARY KEY (slide_id));
+slide_id INT NOT NULL AUTO_INCREMENT,
+question VARCHAR(100),
+slide_start INT DEFAULT 0,
+slide_increment INT DEFAULT 1,
+slide_limit INT,
+PRIMARY KEY (slide_id));
 
 (4) Create the TEXT questions table
 -----> CREATE TABLE text_input(
-		text_id INT NOT NULL AUTO_INCREMENT,
-		question VARCHAR(255),
-		PRIMARY KEY (slide_id));
+text_id INT NOT NULL AUTO_INCREMENT,
+question VARCHAR(255),
+PRIMARY KEY (slide_id));
+
+>Next, we create the tables that will store the patient's answers
+
+(5) Create the MC answers table
+-----> CREATE TABLE mult_choice_answers(
+mc_ans_id INT NOT NULL AUTO_INCREMENT,
+answer CHAR(1),
+question_id INT,
+PRIMARY KEY (mc_ans_id),
+FOREIGN KEY (question_id)
+REFERENCES mult_choice(mc_id)
+ON DELETE CASCADE);
+
+(6) Create the SLIDER answers table
+-----> CREATE TABLE slide_answers(
+slide_ans_id INT NOT NULL AUTO_INCREMENT,
+answer INT DEFAULT 0,
+question_id INT,
+date_stamp DATE,
+time_stamp TIME,
+PRIMARY KEY (slide_ans_id),
+FOREIGN KEY (question_id)
+REFERENCES slide(slide_id)
+ON DELETE CASCADE);
 
 >To check your work as you are going through the instructions:
 

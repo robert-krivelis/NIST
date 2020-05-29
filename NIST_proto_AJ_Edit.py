@@ -25,6 +25,7 @@ from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 from kivy.uix.popup import Popup
 from kivy.uix.slider import Slider
+from kivy.uix.checkbox import CheckBox
 
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.floatlayout import FloatLayout
@@ -98,7 +99,8 @@ def invalidLogin():
     pop.open()
     
 
-# researcher window - current has nothing in it    
+# researcher window - current has nothing in it 
+### Window where researcher can select question type
 class ReWindow(Screen):
     def create_Btn(self):
         mycursor = mydb.cursor()
@@ -182,6 +184,7 @@ def no_question_warn():
                 size_hint = (None, None), size = (400, 400))
     pop.open()
 
+### Summarizes the questions created
 def show_question_num():
     mycursor = mydb.cursor()
     mycursor.execute("SELECT * FROM mult_choice")
@@ -260,24 +263,17 @@ class MainWindow(Screen):
         super (MainWindow, self).__init__(**kwargs)
         with self.canvas:
             pass
-
         with self.canvas.before:
             pass
         with self.canvas.after:
             pass
-
-#second question window
-class SecondWindow(Screen):
-    pass
-# raido buttons
-# slider answer
-
-#third question window
-class ThirdWindow(Screen):
+    
     def next_Btn(self):
         first_q = quest_str_lst[0]
         sm.current = first_q
         sm.transition.direction = "left"
+
+
         
 # this manages the window to allow for screen transitions
 class WindowManager (ScreenManager):
@@ -349,8 +345,23 @@ class MultTemplate (Screen):
             next_q = quest_str_lst[0]
             sm.current = next_q
             sm.transition.diretion = "left"
-       
-       
+            
+
+    def store_mc_answer(self,*args):
+
+        if True in args:
+            answer = str(args.index(True)+1)
+        else:
+            answer = "0"
+        
+        sql_query = "INSERT INTO mult_choice_answers (answer,date_stamp,time_stamp) VALUES (%s, CURDATE(), CURTIME())" % answer
+        
+        mycursor.execute(sql_query)
+        mydb.commit()
+            
+
+
+
 ### This code creates a window on the PATIENT interface
 ### for each SLIDER question that is in the database
 class SlideTemplate(Screen):
@@ -398,8 +409,18 @@ class SlideTemplate(Screen):
             next_q = quest_str_lst[0]
             sm.current = next_q
             sm.transition.direction = "left"
+            
+    def store_slide_answer(self,slider_value):
 
+        sql_query = "INSERT INTO slide_answers (answer,date_stamp,time_stamp) VALUES (%s, CURDATE(), CURTIME())" % slider_value
+        
+        mycursor.execute(sql_query)
+        mydb.commit()        
+            
+            
 
+### Template for patient to enter "text" answer
+### Has not be worked on yet
 class TextTemplate(Screen):
     def next_Btn(self):
         if len (quest_str_lst) == 1:
@@ -434,10 +455,9 @@ sm = WindowManager()
 
 
 # this allows screen to be called by one another via their names
-screens = [SelectWindow(name = 'home'), LogWindow(name = 'login'), 
-           ReWindow(name = 'researcher'), MainWindow(name ='main'),
-           SecondWindow(name = 'second'), ThirdWindow(name ='third'),
-           MultWindow(name = 're_mult'), SliderWindow(name = 're_slider'),
+screens = [SelectWindow(name = 'home'),   LogWindow(name = 'login'), 
+           ReWindow(name = 'researcher'), MainWindow(name ='main'), 
+           MultWindow(name = 're_mult'),  SliderWindow(name = 're_slider'),
            InputWindow(name = 're_input')]
 
 
@@ -522,3 +542,31 @@ class NISTApp (App):
     
 if __name__ == "__main__":
     NISTApp(). run()
+
+
+
+
+
+
+
+
+
+
+
+########## OLD CODES #############
+
+#second question window
+#class SecondWindow(Screen):
+#    pass
+# raido buttons
+# slider answer
+
+#third question window
+# class ThirdWindow(Screen):
+    # def next_Btn(self):
+        # first_q = quest_str_lst[0]
+        # sm.current = first_q
+        # sm.transition.direction = "left"
+        
+#SecondWindow(name = 'second'),
+#ThirdWindow(name ='third'),
